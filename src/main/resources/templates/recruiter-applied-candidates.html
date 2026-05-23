@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="HireNest - View Applications" />
+    <meta name="keywords" content="job applications, candidates, resume" />
+    <meta name="author" content="HireNest" />
+
+    <title>HireNest - View Applications</title>
+
+    <link rel="icon" type="image/png" th:href="@{/assets/favicon.png}" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      :root {
+  --primary-color: #2563eb;
+  --secondary-color: #06b6d4;
+
+  --success-color: #16a34a;
+  --warning-color: #d97706;
+  --danger-color: #dc2626;
+
+  --dark-color: #0f172a;
+  --light-color: #ffffff;
+  --text-color: #475569;
+  --border-color: #e2e8f0;
+
+  --gradient: linear-gradient(135deg, #2563eb, #06b6d4);
+
+  --shadow-sm: 0 8px 20px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 20px 45px rgba(15, 23, 42, 0.1);
+  --shadow-lg: 0 30px 60px rgba(15, 23, 42, 0.16);
+
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow-x: hidden;
+
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 25%),
+    radial-gradient(circle at bottom right, rgba(6, 182, 212, 0.08), transparent 25%),
+    #f8fafc;
+
+  color: var(--text-color);
+}
+
+/* NAVBAR */
+
+.navbar {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+
+  padding: 1rem 6%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: rgba(255, 255, 255, 0.75);
+
+  backdrop-filter: blur(18px);
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+
+  z-index: 1000;
+
+  box-shadow: var(--shadow-sm);
+}
+
+.logo a {
+  text-decoration: none;
+
+  display: flex;
+  align-items: center;
+
+  font-size: 2rem;
+  font-weight: 700;
+
+  background: var(--gradient);
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logo img {
+  border-radius: 8px;
+}
+
+/* LOGOUT BUTTON */
+
+.logout-btn {
+  padding: 0.85rem 1.8rem;
+
+  border-radius: 50px;
+
+  border: 2px solid var(--primary-color);
+
+  color: var(--primary-color);
+
+  text-decoration: none;
+
+  font-weight: 600;
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  transition: var(--transition);
+}
+
+.logout-btn:hover {
+  background: var(--gradient);
+
+  color: white;
+
+  border-color: transparent;
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 12px 25px rgba(37, 99, 235, 0.22);
+}
+
+/* CONTENT */
+
+.content {
+  flex: 1;
+
+  width: 100%;
+  max-width: 1500px;
+
+  margin: auto;
+
+  padding: 8rem 5% 4rem;
+}
+
+/* TITLE */
+
+.page-title {
+  text-align: center;
+
+  font-size: 3rem;
+  font-weight: 700;
+
+  margin-bottom: 3rem;
+
+  background: var(--gradient);
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* GRID */
+
+.candidates-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
+
+  gap: 2rem;
+}
+
+/* CARD */
+
+.candidate-card {
+  position: relative;
+
+  background: rgba(255, 255, 255, 0.78);
+
+  backdrop-filter: blur(20px);
+
+  border-radius: 30px;
+
+  padding: 2.2rem;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.35);
+
+  box-shadow: var(--shadow-md);
+
+  transition: var(--transition);
+
+  text-align: center;
+}
+
+.candidate-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 7px;
+
+  background: var(--gradient);
+}
+
+.candidate-card:hover {
+  transform: translateY(-10px);
+
+  box-shadow: var(--shadow-lg);
+}
+
+/* PROFILE IMAGE */
+
+.candidate-image {
+  width: 120px;
+  height: 120px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  margin-bottom: 1.5rem;
+
+  border: 5px solid rgba(37, 99, 235, 0.12);
+
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
+
+  transition: var(--transition);
+}
+
+.candidate-card:hover .candidate-image {
+  transform: scale(1.05);
+}
+
+/* NAME */
+
+.candidate-name {
+  font-size: 1.6rem;
+  font-weight: 700;
+
+  color: var(--dark-color);
+
+  margin-bottom: 1rem;
+}
+
+/* DETAILS */
+
+.candidate-skills {
+  padding: 1rem;
+
+  margin-bottom: 1rem;
+
+  border-radius: 18px;
+
+  background: rgba(248, 250, 252, 0.9);
+
+  border: 1px solid rgba(226, 232, 240, 0.7);
+
+  color: var(--text-color);
+
+  font-size: 0.95rem;
+
+  line-height: 1.7;
+
+  transition: var(--transition);
+}
+
+.candidate-skills:hover {
+  transform: translateX(5px);
+
+  background: rgba(239, 246, 255, 0.9);
+
+  border-color: rgba(37, 99, 235, 0.15);
+}
+
+.candidate-skills strong {
+  color: var(--dark-color);
+}
+
+/* STATUS */
+
+.status-text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.45rem 1rem;
+
+  border-radius: 50px;
+
+  font-size: 0.82rem;
+  font-weight: 600;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.5px;
+}
+
+.status-pending {
+  background: rgba(217, 119, 6, 0.12);
+  color: var(--warning-color);
+}
+
+.status-accepted {
+  background: rgba(22, 163, 74, 0.12);
+  color: var(--success-color);
+}
+
+.status-rejected {
+  background: rgba(220, 38, 38, 0.12);
+  color: var(--danger-color);
+}
+
+.status-scheduled {
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--primary-color);
+}
+
+/* BUTTON */
+
+.download-btn {
+  width: 100%;
+
+  padding: 1rem;
+
+  margin-top: 1rem;
+
+  border: none;
+
+  border-radius: 18px;
+
+  background: var(--gradient);
+
+  color: white;
+
+  text-decoration: none;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.6rem;
+
+  cursor: pointer;
+
+  transition: var(--transition);
+
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.18);
+}
+
+.download-btn:hover {
+  transform: translateY(-3px);
+
+  box-shadow: 0 18px 35px rgba(15, 23, 42, 0.16);
+}
+
+/* SELECT */
+
+select.download-btn {
+  appearance: none;
+
+  outline: none;
+}
+
+/* EMPTY */
+
+.empty-message {
+  text-align: center;
+
+  font-size: 1.2rem;
+  font-weight: 500;
+
+  color: #64748b;
+
+  margin-top: 3rem;
+}
+
+/* FOOTER */
+
+.footer {
+  background: #0f172a;
+
+  padding: 1.5rem 6%;
+
+  margin-top: auto;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+
+  gap: 3rem;
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.8);
+
+  text-decoration: none;
+
+  transition: var(--transition);
+}
+
+.footer-links a:hover {
+  color: white;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 1rem;
+  }
+
+  .content {
+    padding: 7rem 1rem 3rem;
+  }
+
+  .page-title {
+    font-size: 2.3rem;
+  }
+
+  .candidates-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .candidate-card {
+    padding: 1.7rem;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    align-items: center;
+
+    gap: 1rem;
+  }
+}
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar">
+      <div class="logo">
+        <a th:href="@{/recruiter/home}">
+          <img
+            th:src="@{/assets/favicon.png}"
+            alt="HireNest Logo"
+            style="width: 30px; height: 30px; margin-right: 10px"
+          />
+          HireNest
+        </a>
+      </div>
+
+      <a th:href="@{/logout}" class="logout-btn">
+        Logout
+        <i class="fas fa-sign-out-alt"></i>
+      </a>
+    </nav>
+
+    <div class="content">
+      <h1 class="page-title">Applied Candidates</h1>
+
+      <div
+        th:if="${appliers == null || #lists.isEmpty(appliers)}"
+        class="empty-message"
+      >
+        No Candidates Applied Yet
+      </div>
+
+      <div
+        class="candidates-grid"
+        th:if="${appliers != null && !#lists.isEmpty(appliers)}"
+      >
+        <div class="candidate-card" th:each="applier : ${appliers}">
+          <img
+            th:src="${applier.profilePicUrl}"
+            alt="Candidate Photo"
+            class="candidate-image"
+          />
+
+          <div class="candidate-info">
+            <h3 class="candidate-name" th:text="${applier.name}">
+              Candidate Name
+            </h3>
+
+            <p class="candidate-skills">
+              <strong>Education:</strong>
+              <span
+                th:text="${applier.education != null ? applier.education.degree : 'Not Added'}"
+              ></span>
+            </p>
+
+            <p class="candidate-skills">
+              <strong>Experience:</strong>
+
+              <span
+                th:text="${applier.experience != null ? applier.experience.position + ' - ' + applier.experience.company : 'Fresher'}"
+              ></span>
+            </p>
+
+            <a
+              th:href="${applier.resumeUrl}"
+              target="_blank"
+              class="download-btn"
+            >
+              <i class="fas fa-download"></i>
+              Download Resume
+            </a>
+
+            <p class="candidate-skills" style="margin-top: 1rem">
+              <strong>Status:</strong>
+
+              <span
+                class="status-text"
+                th:classappend="${applier.getStatus(job).status == 'PENDING'} ? 'status-pending' :
+                                 (${applier.getStatus(job).status == 'ACCEPTED'} ? 'status-accepted' :
+                                 (${applier.getStatus(job).status == 'SCHEDULED'} ? 'status-scheduled' :
+                                 'status-rejected'))"
+                th:text="${applier.getStatus(job).status}"
+              >
+              </span>
+            </p>
+
+            <form
+              th:action="@{'/recruiter/update-status/' + ${applier.getStatus(job).id}}"
+              method="post"
+            >
+              <select class="download-btn" name="status">
+                <option value="">Change Status</option>
+
+                <option value="ACCEPTED">Accept</option>
+
+                <option value="REJECTED">Reject</option>
+
+                <option value="SCHEDULED">Schedule</option>
+              </select>
+
+              <button type="submit" class="download-btn">
+                Update Status
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a th:href="@{/about-us}">About Us</a>
+
+          <a th:href="@{/privacy-policy}">Privacy Policy</a>
+
+          <a th:href="@{/terms}">Terms of Service</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

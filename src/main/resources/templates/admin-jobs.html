@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="HireNest - Admin Job Management" />
+    <meta
+      name="keywords"
+      content="admin dashboard, job management, job listings"
+    />
+    <meta name="author" content="HireNest" />
+    <meta name="robots" content="index, follow" />
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <title>HireNest - Admin Jobs</title>
+
+    <style>
+     /* CONTENT */
+
+.content {
+  flex: 1;
+
+  width: 100%;
+  max-width: 1600px;
+
+  margin: auto;
+
+  padding: 8.5rem 4% 4rem;
+}
+
+/* GRID */
+
+.jobs-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+
+  gap: 2.5rem;
+}
+
+/* JOB CARD */
+
+.job-card {
+  position: relative;
+
+  background: rgba(255, 255, 255, 0.82);
+
+  backdrop-filter: blur(22px);
+
+  border-radius: 34px;
+
+  padding: 2.3rem;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.5);
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.06),
+    0 20px 60px rgba(37, 99, 235, 0.08);
+
+  transition: all 0.4s ease;
+
+  display: flex;
+  flex-direction: column;
+
+  min-height: 100%;
+}
+
+.job-card::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(37, 99, 235, 0.05),
+      rgba(6, 182, 212, 0.04)
+    );
+
+  opacity: 0;
+
+  transition: 0.4s ease;
+}
+
+.job-card::after {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 7px;
+
+  background: linear-gradient(135deg, #2563eb, #06b6d4);
+}
+
+.job-card:hover {
+  transform: translateY(-12px) scale(1.015);
+
+  box-shadow:
+    0 20px 50px rgba(15, 23, 42, 0.12),
+    0 30px 80px rgba(37, 99, 235, 0.12);
+}
+
+.job-card:hover::before {
+  opacity: 1;
+}
+
+/* JOB TITLE */
+
+.job-card h3 {
+  position: relative;
+  z-index: 2;
+
+  font-size: 1.8rem;
+  font-weight: 700;
+
+  color: #0f172a;
+
+  margin-bottom: 2rem;
+
+  padding-bottom: 1rem;
+
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+
+  line-height: 1.4;
+}
+
+/* JOB DETAILS */
+
+.job-detail {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 1rem;
+
+  padding: 1rem 1.1rem;
+
+  margin-bottom: 1rem;
+
+  border-radius: 20px;
+
+  background: rgba(248, 250, 252, 0.95);
+
+  border: 1px solid rgba(226, 232, 240, 0.7);
+
+  transition: all 0.3s ease;
+}
+
+.job-detail:hover {
+  background: rgba(239, 246, 255, 0.95);
+
+  border-color: rgba(37, 99, 235, 0.15);
+
+  transform: translateX(6px);
+}
+
+.job-detail strong {
+  min-width: 120px;
+
+  color: #0f172a;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.job-detail span {
+  flex: 1;
+
+  color: #475569;
+
+  font-size: 0.95rem;
+
+  line-height: 1.7;
+
+  word-break: break-word;
+}
+
+/* ACTION BUTTONS */
+
+.action-buttons {
+  margin-top: auto;
+
+  padding-top: 2rem;
+
+  position: relative;
+  z-index: 2;
+}
+
+.status-btn {
+  width: 100%;
+
+  padding: 1rem 1.3rem;
+
+  border: none;
+
+  border-radius: 20px;
+
+  color: white;
+
+  font-size: 1rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.8rem;
+
+  transition: all 0.35s ease;
+}
+
+.approve-btn {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+
+  box-shadow: 0 12px 25px rgba(34, 197, 94, 0.22);
+}
+
+.reject-btn {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+
+  box-shadow: 0 12px 25px rgba(239, 68, 68, 0.22);
+}
+
+.status-btn:hover {
+  transform: translateY(-4px);
+
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
+}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+  .content {
+    padding: 7rem 1rem 3rem;
+  }
+
+  .jobs-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .job-card {
+    padding: 1.5rem;
+    border-radius: 26px;
+  }
+
+  .job-card h3 {
+    font-size: 1.5rem;
+  }
+
+  .job-detail {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .job-detail strong {
+    min-width: auto;
+  }
+}
+    </style>
+  </head>
+
+  <body>
+    <div th:if="${session.success}" class="alert-message success">
+      <span th:text="${session.success}"></span>
+      <button
+        class="alert-close"
+        onclick="this.parentElement.style.display='none'"
+      >
+        ×
+      </button>
+      <th:block th:text="${@messageRemover.remove()}"></th:block>
+    </div>
+    <div th:if="${session.error}" class="alert-message error">
+      <span th:text="${session.error}"></span>
+      <button
+        class="alert-close"
+        onclick="this.parentElement.style.display='none'"
+      >
+        ×
+      </button>
+      <th:block th:text="${@messageRemover.remove()}"></th:block>
+    </div>
+
+    <nav class="navbar">
+      <div class="logo">
+        <a href="/admin/home">
+          <img
+            src="/assets/favicon.png"
+            alt="HireNest Logo"
+            style="width: 30px; height: 30px; margin-right: 10px"
+          />
+          HireNest Admin
+        </a>
+      </div>
+      <a href="/logout" class="logout-btn"
+        >Logout <i class="fas fa-sign-out-alt"></i
+      ></a>
+    </nav>
+
+    <div class="content">
+      <div class="jobs-grid">
+        <div class="job-card" th:each="job:${jobs}">
+          <h3 th:text="${job.role}">Role</h3>
+          <div class="job-detail">
+            <strong>Company:</strong>
+            <span th:text="${job.recruiter.companyName}"></span>
+          </div>
+          <div class="job-detail">
+            <strong>Package:</strong>
+            <span th:text="${job.ctc}+' LPA'"></span>
+          </div>
+          <div class="job-detail">
+            <strong>Description:</strong>
+            <span th:text="${job.description}"></span>
+          </div>
+          <div class="job-detail">
+            <strong>Experience:</strong>
+            <span th:text="${job.experience}+' years'"></span>
+          </div>
+          <div class="job-detail">
+            <strong>Skills:</strong>
+            <span th:text="${job.skills}"></span>
+          </div>
+          <div class="job-detail">
+            <strong>Location:</strong>
+            <span th:text="${job.location}"></span>
+          </div>
+          <div class="job-detail">
+            <strong>Recruiter:</strong>
+            <span th:text="${job.recruiter.name}"></span>
+          </div>
+          <div class="job-detail">
+            <strong>Contact:</strong>
+            <span th:text="${job.recruiter.email}"></span>
+          </div>
+          <div class="action-buttons">
+            <a th:if="${!job.approved}" th:href="'/admin/change/'+${job.id}">
+              <button class="status-btn approve-btn">
+                <i class="fas fa-check-circle"></i> Approve Job
+              </button>
+            </a>
+            <a th:if="${job.approved}" th:href="'/admin/change/'+${job.id}">
+              <button class="status-btn reject-btn">
+                <i class="fas fa-ban"></i> Reject Job
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="/about-us">About Us</a>
+          <a href="/privacy-policy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const alerts = document.querySelectorAll(".alert-message");
+        alerts.forEach((alert) => {
+          setTimeout(() => {
+            alert.style.display = "none";
+          }, 2000);
+        });
+      });
+    </script>
+  </body>
+</html>
